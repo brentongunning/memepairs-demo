@@ -41,14 +41,14 @@ export default function EntangledLaunch() {
     
     const width = 600
     const height = 300
-    const margin = { top: 20, right: 30, bottom: 40, left: 60 }
+    const margin = { top: 20, right: 70, bottom: 40, left: 60 }
     
     const xScale = d3.scaleLinear()
       .domain([0, targetRaised])
       .range([margin.left, width - margin.right])
     
     const yScale = d3.scaleLog()
-      .domain([0.00001, 1])
+      .domain([0.00001, 0.002])
       .range([height - margin.bottom, margin.top])
     
     // Bonding curve line
@@ -118,8 +118,12 @@ export default function EntangledLaunch() {
     svg.append('g')
       .attr('transform', `translate(${margin.left},0)`)
       .call(d3.axisLeft(yScale)
-        .ticks(5)
-        .tickFormat(d => `$${d3.format('.2s')(d)}`))
+        .tickValues([0.00001, 0.00005, 0.0001, 0.0005, 0.001, 0.002])
+        .tickFormat(d => {
+          if (d >= 0.001) return `$${d.toFixed(3)}`
+          if (d >= 0.0001) return `$${d.toFixed(4)}`
+          return `$${d.toFixed(5)}`
+        }))
       .style('color', '#6b7280')
     
     // Labels
@@ -155,7 +159,7 @@ export default function EntangledLaunch() {
   }
   
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-8">
+    <div className="min-h-screen flex flex-col items-center justify-center p-8 pt-12">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -163,7 +167,7 @@ export default function EntangledLaunch() {
       >
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-chiefs-red via-purple-500 to-eagles-green bg-clip-text text-transparent">
+          <h1 className="text-5xl font-bold mb-4 pb-2 bg-gradient-to-r from-chiefs-red via-purple-500 to-eagles-green bg-clip-text text-transparent leading-tight">
             Entangled Memes Launch
           </h1>
           <p className="text-gray-400 text-lg">Two tokens, one destiny. Choose your allocation.</p>
@@ -204,7 +208,9 @@ export default function EntangledLaunch() {
               <TrendingUp className="w-6 h-6 text-purple-500" />
               Bonding Curve
             </h2>
-            <svg ref={svgRef} width="600" height="300" className="w-full" />
+            <div className="w-full">
+              <svg ref={svgRef} viewBox="0 0 600 300" className="w-full h-auto" preserveAspectRatio="xMidYMid meet" />
+            </div>
             <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
               <div className="bg-gray-800/50 rounded-lg p-3">
                 <div className="text-gray-400">Current Price</div>

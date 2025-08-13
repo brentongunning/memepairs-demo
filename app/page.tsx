@@ -109,7 +109,7 @@ export default function Home() {
                   >
                     <Zap className="w-16 h-16 text-purple-500" />
                   </motion.div>
-                  <h1 className="text-5xl lg:text-6xl font-bold mb-4 bg-gradient-to-r from-chiefs-red via-purple-500 to-eagles-green bg-clip-text text-transparent">
+                  <h1 className="text-5xl lg:text-6xl font-bold mb-4 pb-2 bg-gradient-to-r from-chiefs-red via-purple-500 to-eagles-green bg-clip-text text-transparent leading-tight">
                     Entangled Memes
                   </h1>
                   <p className="text-xl text-gray-400 mb-2">Two tokens, one destiny</p>

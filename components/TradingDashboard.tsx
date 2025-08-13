@@ -63,7 +63,7 @@ export default function TradingDashboard() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <h1 className="text-4xl lg:text-5xl font-bold mb-2 bg-gradient-to-r from-chiefs-red via-purple-500 to-eagles-green bg-clip-text text-transparent">
+          <h1 className="text-4xl lg:text-5xl font-bold mb-2 pb-2 bg-gradient-to-r from-chiefs-red via-purple-500 to-eagles-green bg-clip-text text-transparent leading-tight">
             Trading Arena
           </h1>
           <p className="text-gray-400">Watch the quantum dynamics unfold</p>
