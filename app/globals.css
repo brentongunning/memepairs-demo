@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+:root {
+  --chiefs-red: #E31837;
+  --chiefs-gold: #FFB81C;
+  --eagles-green: #004C54;
+  --eagles-silver: #A5ACAF;
+  --neon-teal: #00D4AA;
+  --dark-bg: #0A0A0B;
+  --dark-card: #151517;
+}
+
+body {
+  background-color: var(--dark-bg);
+  color: white;
+}
+
+.glow-border {
+  position: relative;
+  box-shadow: 0 0 20px rgba(0, 212, 170, 0.3);
+}
+
+.neon-text {
+  text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+}
+
+.glass-card {
+  background-color: rgba(21, 21, 23, 0.5);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark-bg {
+  background-color: var(--dark-bg);
+}
+
+.dark-card {
+  background-color: var(--dark-card);
+}
+
+.bg-chiefs-red { background-color: var(--chiefs-red); }
+.bg-eagles-green { background-color: var(--eagles-green); }
+.bg-neon-teal { background-color: var(--neon-teal); }
+
+.text-chiefs-red { color: var(--chiefs-red); }
+.text-eagles-green { color: var(--eagles-green); }
+.text-neon-teal { color: var(--neon-teal); }
+
+.border-chiefs-red { border-color: var(--chiefs-red); }
+.border-eagles-green { border-color: var(--eagles-green); }
+.border-neon-teal { border-color: var(--neon-teal); }
+
+.from-chiefs-red { --tw-gradient-from: var(--chiefs-red); }
+.from-eagles-green { --tw-gradient-from: var(--eagles-green); }
+.to-chiefs-red { --tw-gradient-to: var(--chiefs-red); }
+.to-eagles-green { --tw-gradient-to: var(--eagles-green); }
