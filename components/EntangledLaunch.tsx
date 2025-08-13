@@ -120,9 +120,10 @@ export default function EntangledLaunch() {
       .call(d3.axisLeft(yScale)
         .tickValues([0.00001, 0.00005, 0.0001, 0.0005, 0.001, 0.002])
         .tickFormat(d => {
-          if (d >= 0.001) return `$${d.toFixed(3)}`
-          if (d >= 0.0001) return `$${d.toFixed(4)}`
-          return `$${d.toFixed(5)}`
+          const value = Number(d)
+          if (value >= 0.001) return `$${value.toFixed(3)}`
+          if (value >= 0.0001) return `$${value.toFixed(4)}`
+          return `$${value.toFixed(5)}`
         }))
       .style('color', '#6b7280')
     
