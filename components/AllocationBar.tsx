@@ -8,13 +8,19 @@ interface AllocationBarProps {
   currentEaglesPercentage: number;
   onPurchase: (amount: number, chiefsPercentage: number) => void;
   disabled: boolean;
+  totalRaised?: number;
+  userChiefsTokens?: number;
+  userEaglesTokens?: number;
 }
 
 export default function AllocationBar({
   currentChiefsPercentage,
   currentEaglesPercentage,
   onPurchase,
-  disabled
+  disabled,
+  totalRaised = 0,
+  userChiefsTokens = 0,
+  userEaglesTokens = 0
 }: AllocationBarProps) {
   const [amount, setAmount] = useState<string>('100');
   const [allocation, setAllocation] = useState<number>(50);
@@ -33,6 +39,33 @@ export default function AllocationBar({
   return (
     <div className="glass-card p-8 rounded-2xl">
       <h2 className="text-2xl font-bold mb-6">Buy Into The Entangled Pair</h2>
+      
+      {/* User Holdings Display */}
+      {(userChiefsTokens > 0 || userEaglesTokens > 0) && (
+        <div className="mb-6 p-4 bg-dark-bg/30 rounded-lg border border-white/10">
+          <div className="text-sm text-gray-400 mb-2">Your Current Holdings</div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-chiefs-red rounded-full"></div>
+              <div>
+                <span className="text-lg font-bold text-white">
+                  {(userChiefsTokens / 1000000).toFixed(2)}M
+                </span>
+                <span className="text-xs text-gray-400 ml-1">Chiefs</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-eagles-green rounded-full"></div>
+              <div>
+                <span className="text-lg font-bold text-white">
+                  {(userEaglesTokens / 1000000).toFixed(2)}M
+                </span>
+                <span className="text-xs text-gray-400 ml-1">Eagles</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       
       {/* Current allocation display */}
       <div className="mb-8">
@@ -123,12 +156,18 @@ export default function AllocationBar({
               <div className="text-xs text-gray-500 mt-1">
                 ${((parseFloat(amount) || 0) * allocation / 100).toFixed(2)}
               </div>
+              <div className="text-xs text-gray-400 mt-1">
+                ~{((parseFloat(amount) || 0) * allocation / 100 / 69000 * 1000000000).toLocaleString(undefined, { maximumFractionDigits: 0 })} tokens
+              </div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-eagles-green">{100 - allocation}%</div>
               <div className="text-sm text-gray-400">Eagles</div>
               <div className="text-xs text-gray-500 mt-1">
                 ${((parseFloat(amount) || 0) * (100 - allocation) / 100).toFixed(2)}
+              </div>
+              <div className="text-xs text-gray-400 mt-1">
+                ~{((parseFloat(amount) || 0) * (100 - allocation) / 100 / 69000 * 1000000000).toLocaleString(undefined, { maximumFractionDigits: 0 })} tokens
               </div>
             </div>
           </div>

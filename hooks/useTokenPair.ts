@@ -15,8 +15,9 @@ export function useTokenPair() {
   const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [swaps, setSwaps] = useState<Swap[]>([]);
   const [isSimulating, setIsSimulating] = useState(false);
+  const [userTokens, setUserTokens] = useState({ chiefs: 0, eagles: 0 });
 
-  const makePurchase = useCallback((amount: number, chiefsPercentage: number) => {
+  const makePurchase = useCallback((amount: number, chiefsPercentage: number, isUser = false) => {
     if (state.isGraduated) return;
     
     const purchase: Purchase = {
@@ -25,8 +26,18 @@ export function useTokenPair() {
       chiefsAllocation: (amount * chiefsPercentage) / 100,
       eaglesAllocation: (amount * (100 - chiefsPercentage)) / 100,
       timestamp: Date.now(),
-      buyer: `User${Math.floor(Math.random() * 9999)}`,
+      buyer: isUser ? 'You' : `User${Math.floor(Math.random() * 9999)}`,
     };
+    
+    // Calculate tokens received (proportional to amount / total market cap)
+    if (isUser) {
+      const chiefsTokens = (amount * chiefsPercentage / 100 / GRADUATION_MARKET_CAP) * 1_000_000_000;
+      const eaglesTokens = (amount * (100 - chiefsPercentage) / 100 / GRADUATION_MARKET_CAP) * 1_000_000_000;
+      setUserTokens(prev => ({
+        chiefs: prev.chiefs + chiefsTokens,
+        eagles: prev.eagles + eaglesTokens,
+      }));
+    }
     
     setPurchases(prev => [...prev, purchase]);
     setState(prev => processPurchase(prev, amount, chiefsPercentage));
@@ -80,6 +91,7 @@ export function useTokenPair() {
     setPurchases([]);
     setSwaps([]);
     setIsSimulating(false);
+    setUserTokens({ chiefs: 0, eagles: 0 });
   }, []);
 
   // Simulate automated purchases during launch phase
@@ -99,6 +111,7 @@ export function useTokenPair() {
     state,
     purchases,
     swaps,
+    userTokens,
     makePurchase,
     makeSwap,
     forceGraduate,

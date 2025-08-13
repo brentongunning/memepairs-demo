@@ -44,20 +44,20 @@ export default function MarketCard({ token, circulating, price, marketCap }: Mar
         </div>
       </div>
 
-      {/* Price Display */}
+      {/* Market Cap Display (now prominent) */}
       <div className="mb-6">
-        <div className="text-sm text-gray-400 mb-1">Price per Token</div>
+        <div className="text-sm text-gray-400 mb-1">Market Cap</div>
         <div className="text-3xl font-bold text-white">
-          ${price.toFixed(7)}
+          ${marketCap.toLocaleString()}
         </div>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 gap-4 mb-6">
         <div>
-          <div className="text-xs text-gray-400">Market Cap</div>
+          <div className="text-xs text-gray-400">Price per Token</div>
           <div className="text-lg font-semibold">
-            ${marketCap.toLocaleString()}
+            ${price.toFixed(7)}
           </div>
         </div>
         <div>

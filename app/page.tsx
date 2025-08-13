@@ -3,21 +3,17 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useTokenPair } from '@/hooks/useTokenPair';
-import { useGameSimulation } from '@/hooks/useGameSimulation';
-import { useBotTrading } from '@/hooks/useBotTrading';
 import BondingCurve from '@/components/BondingCurve';
 import AllocationBar from '@/components/AllocationBar';
 import ActivityFeed from '@/components/ActivityFeed';
 import GraduationAnimation from '@/components/GraduationAnimation';
-import TradingInterface from '@/components/TradingInterface';
-import GameSimulator from '@/components/GameSimulator';
-import PairPool from '@/components/PairPool';
 
 export default function Home() {
   const {
     state,
     purchases,
     swaps,
+    userTokens,
     makePurchase,
     makeSwap,
     forceGraduate,
@@ -28,31 +24,6 @@ export default function Home() {
     isSimulating,
   } = useTokenPair();
 
-  const {
-    gameState,
-    events,
-    isRunning: isGameRunning,
-    startGame,
-    pauseGame,
-    resetGame,
-  } = useGameSimulation((chiefsScore, eaglesScore) => {
-    // Trigger bot trading on score changes
-    if (state.isGraduated) {
-      // Market reacts to score changes
-      const scoreDiff = chiefsScore - eaglesScore;
-      const marketReaction = 69000 + (scoreDiff * 500); // Market cap changes with score
-      updateMarketCap(Math.max(50000, marketReaction)); // Keep minimum at 50k
-    }
-  });
-
-  const { activeBots } = useBotTrading({
-    isEnabled: state.isGraduated && isGameRunning,
-    chiefsScore: gameState.chiefsScore,
-    eaglesScore: gameState.eaglesScore,
-    chiefsCirculating: state.chiefsCirculating,
-    eaglesCirculating: state.eaglesCirculating,
-    onSwap: makeSwap,
-  });
 
   const [showGraduation, setShowGraduation] = useState(false);
   const [hasShownGraduation, setHasShownGraduation] = useState(false);
@@ -76,29 +47,12 @@ export default function Home() {
     }
   }, [state.isGraduated, hasShownGraduation, stopSimulation]);
 
-  // Auto-start game after graduation
-  useEffect(() => {
-    if (state.isGraduated && !showGraduation && !isGameRunning) {
-      const timer = setTimeout(() => {
-        startGame();
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [state.isGraduated, showGraduation, isGameRunning, startGame]);
-
   const handleReset = () => {
     reset();
-    resetGame();
     setHasShownGraduation(false);
     setShowGraduation(false);
   };
 
-  // Get recent swaps for pool animation
-  const recentSwaps = swaps.slice(-10).map(s => ({
-    from: s.from,
-    amount: s.amount,
-    timestamp: s.timestamp,
-  }));
 
   return (
     <main className="min-h-screen dark-bg p-4">
@@ -156,8 +110,10 @@ export default function Home() {
             <AllocationBar
               currentChiefsPercentage={state.allocationPercentageChiefs}
               currentEaglesPercentage={state.allocationPercentageEagles}
-              onPurchase={makePurchase}
+              onPurchase={(amount, chiefsPercentage) => makePurchase(amount, chiefsPercentage, true)}
               disabled={state.isGraduated}
+              userChiefsTokens={userTokens.chiefs}
+              userEaglesTokens={userTokens.eagles}
             />
 
             {/* Demo Controls */}
@@ -185,51 +141,20 @@ export default function Home() {
             </div>
           </div>
         ) : (
-          // Trading Phase
+          // Post-Graduation Phase (Empty)
           <div className="space-y-6">
-            {/* Game Simulator */}
-            <GameSimulator
-              gameState={gameState}
-              events={events}
-              isRunning={isGameRunning}
-              onStart={startGame}
-              onPause={pauseGame}
-              onReset={resetGame}
-            />
-
-            {/* Trading Interface */}
-            <TradingInterface
-              state={state}
-              onSwap={makeSwap}
-              combinedMarketCap={state.combinedMarketCap}
-            />
-
-            {/* Bot Activity Indicator */}
-            {activeBots > 0 && (
-              <motion.div
-                className="fixed bottom-4 right-4 px-4 py-2 bg-dark-card rounded-lg border border-neon-teal/30"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-              >
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-neon-teal rounded-full animate-pulse" />
-                  <span className="text-sm text-gray-400">
-                    {activeBots} bots trading
-                  </span>
-                </div>
-              </motion.div>
-            )}
-
-            {/* Activity Feed */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-3">
-                <ActivityFeed
-                  purchases={purchases}
-                  swaps={swaps}
-                  isGraduated={state.isGraduated}
-                />
-              </div>
-            </div>
+            <motion.div
+              className="text-center py-20"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              <h2 className="text-3xl font-bold text-white mb-4">
+                Tokens Graduated! 🎉
+              </h2>
+              <p className="text-gray-400">
+                Market cap reached $69k - Tokens are now graduated
+              </p>
+            </motion.div>
           </div>
         )}
 
