@@ -178,9 +178,9 @@ export const useDemoStore = create<DemoStore>((set, get) => ({
     
     // Quantum swap formula with curve
     const k = fromPool * toPool // constant product
-    const newFromPool = fromPool + amount
+    const newFromPool = fromPool - amount // Subtract from the "from" pool
     const newToPool = k / newFromPool
-    const outputAmount = toPool - newToPool
+    const outputAmount = newToPool - toPool // Calculate output amount properly
     
     set({
       quantumPoolChiefs: fromToken === 'chiefs' ? newFromPool : newToPool,

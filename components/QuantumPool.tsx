@@ -26,12 +26,14 @@ export default function QuantumPool() {
     const fromPool = selectedToken === 'chiefs' ? quantumPoolChiefs : quantumPoolEagles
     const toPool = selectedToken === 'chiefs' ? quantumPoolEagles : quantumPoolChiefs
     
-    if (fromPool && toPool && swapAmount > 0) {
+    if (fromPool && toPool && swapAmount > 0 && swapAmount <= fromPool) {
       const k = fromPool * toPool
-      const newFromPool = fromPool + swapAmount
+      const newFromPool = fromPool - swapAmount // Subtract from the "from" pool
       const newToPool = k / newFromPool
-      const output = toPool - newToPool
+      const output = newToPool - toPool // Calculate output amount properly
       setOutputAmount(output)
+    } else {
+      setOutputAmount(0)
     }
   }, [selectedToken, swapAmount, quantumPoolChiefs, quantumPoolEagles])
   
