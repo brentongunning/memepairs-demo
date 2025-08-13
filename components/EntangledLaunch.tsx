@@ -117,7 +117,9 @@ export default function EntangledLaunch() {
     
     svg.append('g')
       .attr('transform', `translate(${margin.left},0)`)
-      .call(d3.axisLeft(yScale).tickFormat(d => `$${d3.format('.2s')(d)}`))
+      .call(d3.axisLeft(yScale)
+        .ticks(5)
+        .tickFormat(d => `$${d3.format('.2s')(d)}`))
       .style('color', '#6b7280')
     
     // Labels
