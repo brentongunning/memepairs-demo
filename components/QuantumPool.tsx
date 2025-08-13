@@ -18,8 +18,9 @@ export default function QuantumPool() {
     addTrade,
   } = useDemoStore()
   
-  const chiefsPercentage = (quantumPoolChiefs / 1000000000) * 100
-  const eaglesPercentage = (quantumPoolEagles / 1000000000) * 100
+  const totalPool = quantumPoolChiefs + quantumPoolEagles
+  const chiefsPercentage = totalPool > 0 ? (quantumPoolChiefs / totalPool) * 100 : 50
+  const eaglesPercentage = totalPool > 0 ? (quantumPoolEagles / totalPool) * 100 : 50
   
   // Calculate output preview
   useEffect(() => {
