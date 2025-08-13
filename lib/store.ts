@@ -117,14 +117,15 @@ export const useDemoStore = create<DemoStore>((set, get) => ({
       const newPurchases = [...state.purchases, newPurchase]
       const totalAmount = state.currentRaised + purchase.amount
       
-      // Calculate weighted average allocation
+      // Calculate weighted average allocation (chiefsAllocation and eaglesAllocation are already percentages 0-100)
       const totalChiefsWeight = state.purchases.reduce((sum, p) => sum + (p.chiefsAllocation * p.amount), 0) 
         + (purchase.chiefsAllocation * purchase.amount)
       const totalEaglesWeight = state.purchases.reduce((sum, p) => sum + (p.eaglesAllocation * p.amount), 0)
         + (purchase.eaglesAllocation * purchase.amount)
       
-      const collectiveChiefsAllocation = (totalChiefsWeight / totalAmount) * 100
-      const collectiveEaglesAllocation = (totalEaglesWeight / totalAmount) * 100
+      // These are percentages (0-100), not fractions
+      const collectiveChiefsAllocation = totalChiefsWeight / totalAmount
+      const collectiveEaglesAllocation = totalEaglesWeight / totalAmount
       
       // Update bonding curve price (exponential growth)
       const progress = totalAmount / state.targetRaised
