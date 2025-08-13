@@ -5,8 +5,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Memecoin Pairs Demo',
-  description: 'Interactive demo of memecoin pairs trading mechanism',
+  title: 'Entangled Memes Demo',
+  description: 'Interactive demo of entangled memes trading mechanism',
 }
 
 export default function RootLayout({

@@ -110,12 +110,12 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
         >
           <h1 className="text-5xl font-bold text-white mb-2 neon-text">
-            Memecoin Pairs Demo
+            Entangled Memes Demo
           </h1>
           <p className="text-gray-400">
             {state.isGraduated 
               ? 'Trading Phase - Game determines market sentiment' 
-              : 'Launch Phase - Buy into the pair with your preferred allocation'}
+              : 'Launch Phase - Buy into the entangled pair with your preferred allocation'}
           </p>
         </motion.div>
 

@@ -1,6 +1,6 @@
-# Memecoin Pairs Demo
+# Entangled Memes Demo
 
-An interactive demonstration of the memecoin pairs trading mechanism, featuring a Super Bowl themed token pair (Chiefs vs Eagles).
+An interactive demonstration of the entangled memes trading mechanism, featuring a Super Bowl themed token pair (Chiefs vs Eagles).
 
 ## Live Demo
 
@@ -8,7 +8,7 @@ The demo is running at: http://localhost:3002
 
 ## Concept
 
-Memecoin pairs are a new type of tradable instrument where:
+Entangled memes are a new type of tradable instrument where:
 - Two tokens launch together with a single bonding curve
 - Buyers choose their allocation percentage during launch
 - At graduation ($69k market cap), tokens become tradable with a shared pair pool
@@ -42,7 +42,7 @@ Memecoin pairs are a new type of tradable instrument where:
 2. **Circulating**: Always 1B combined
 3. **Pool**: Always 1B combined (inverse of circulating)
 4. **Pricing**: Individual token price = (Token's % of circulating) × Combined Market Cap / Token's circulating supply
-5. **Swapping**: 1:1 rate through pair pool
+5. **Swapping**: 1:1 rate through pair pool - maintaining quantum entanglement
 
 ## Running Locally
 

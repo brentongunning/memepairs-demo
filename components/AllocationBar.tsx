@@ -32,7 +32,7 @@ export default function AllocationBar({
 
   return (
     <div className="glass-card p-8 rounded-2xl">
-      <h2 className="text-2xl font-bold mb-6">Buy Into The Pair</h2>
+      <h2 className="text-2xl font-bold mb-6">Buy Into The Entangled Pair</h2>
       
       {/* Current allocation display */}
       <div className="mb-8">
@@ -146,7 +146,7 @@ export default function AllocationBar({
           whileHover={!disabled ? { scale: 1.02 } : {}}
           whileTap={!disabled ? { scale: 0.98 } : {}}
         >
-          {disabled ? 'Market Graduated' : 'Buy Into Pair'}
+          {disabled ? 'Market Graduated' : 'Entangle Tokens'}
         </motion.button>
       </div>
 
