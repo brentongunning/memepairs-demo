@@ -95,14 +95,14 @@ export default function QuantumPool() {
           <span className="text-sm text-gray-400">Pool Balance</span>
           <span className="text-xs text-purple-400">Constant Product: k = {(quantumPoolChiefs * quantumPoolEagles / 1e18).toFixed(2)}B²</span>
         </div>
-        <div className="relative h-12 bg-gray-800 rounded-full overflow-hidden">
+        <div className="relative h-12 bg-gray-800 rounded-full overflow-hidden flex">
           <motion.div
-            className="absolute left-0 top-0 h-full bg-gradient-to-r from-chiefs-red to-chiefs-red/50"
+            className="h-full bg-gradient-to-r from-chiefs-red to-chiefs-red/50"
             animate={{ width: `${chiefsPercentage}%` }}
             transition={{ duration: 0.5 }}
           />
           <motion.div
-            className="absolute right-0 top-0 h-full bg-gradient-to-l from-eagles-green to-eagles-green/50"
+            className="h-full bg-gradient-to-r from-eagles-green to-eagles-green/50"
             animate={{ width: `${eaglesPercentage}%` }}
             transition={{ duration: 0.5 }}
           />
