@@ -57,6 +57,8 @@ interface DemoStore {
   eaglesSupply: number
   quantumPoolChiefs: number
   quantumPoolEagles: number
+  walletChiefs: number
+  walletEagles: number
   trades: Trade[]
   addTrade: (trade: Omit<Trade, 'id' | 'timestamp'>) => void
   swapInQuantumPool: (fromToken: 'chiefs' | 'eagles', amount: number) => number
@@ -90,6 +92,8 @@ const INITIAL_STATE = {
   eaglesSupply: 1000000000,
   quantumPoolChiefs: 0,
   quantumPoolEagles: 0,
+  walletChiefs: 10000000,
+  walletEagles: 10000000,
   trades: [] as Trade[],
   gameState: {
     chiefsScore: 0,
@@ -173,18 +177,27 @@ export const useDemoStore = create<DemoStore>((set, get) => ({
   
   swapInQuantumPool: (fromToken, amount) => {
     const state = get()
+    const fromWallet = fromToken === 'chiefs' ? state.walletChiefs : state.walletEagles
+    const toWallet = fromToken === 'chiefs' ? state.walletEagles : state.walletChiefs
     const fromPool = fromToken === 'chiefs' ? state.quantumPoolChiefs : state.quantumPoolEagles
     const toPool = fromToken === 'chiefs' ? state.quantumPoolEagles : state.quantumPoolChiefs
     
+    // Check if user has enough tokens in wallet
+    if (amount > fromWallet) {
+      return 0
+    }
+    
     // Quantum swap formula with curve
     const k = fromPool * toPool // constant product
-    const newFromPool = fromPool - amount // Subtract from the "from" pool
+    const newFromPool = fromPool + amount // Add to the "from" pool (user sends tokens to pool)
     const newToPool = k / newFromPool
-    const outputAmount = newToPool - toPool // Calculate output amount properly
+    const outputAmount = toPool - newToPool // Calculate output amount (pool sends tokens to user)
     
     set({
       quantumPoolChiefs: fromToken === 'chiefs' ? newFromPool : newToPool,
       quantumPoolEagles: fromToken === 'eagles' ? newFromPool : newToPool,
+      walletChiefs: fromToken === 'chiefs' ? fromWallet - amount : toWallet + outputAmount,
+      walletEagles: fromToken === 'eagles' ? fromWallet - amount : toWallet + outputAmount,
     })
     
     return outputAmount

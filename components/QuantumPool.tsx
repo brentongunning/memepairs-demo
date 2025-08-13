@@ -14,6 +14,8 @@ export default function QuantumPool() {
   const {
     quantumPoolChiefs,
     quantumPoolEagles,
+    walletChiefs,
+    walletEagles,
     swapInQuantumPool,
     addTrade,
   } = useDemoStore()
@@ -24,19 +26,20 @@ export default function QuantumPool() {
   
   // Calculate output preview
   useEffect(() => {
+    const fromWallet = selectedToken === 'chiefs' ? walletChiefs : walletEagles
     const fromPool = selectedToken === 'chiefs' ? quantumPoolChiefs : quantumPoolEagles
     const toPool = selectedToken === 'chiefs' ? quantumPoolEagles : quantumPoolChiefs
     
-    if (fromPool && toPool && swapAmount > 0 && swapAmount <= fromPool) {
+    if (fromPool && toPool && swapAmount > 0 && swapAmount <= fromWallet) {
       const k = fromPool * toPool
-      const newFromPool = fromPool - swapAmount // Subtract from the "from" pool
+      const newFromPool = fromPool + swapAmount // Add to the "from" pool (user sends tokens to pool)
       const newToPool = k / newFromPool
-      const output = newToPool - toPool // Calculate output amount properly
-      setOutputAmount(output)
+      const output = toPool - newToPool // Calculate output amount (pool sends tokens to user)
+      setOutputAmount(Math.max(0, output))
     } else {
       setOutputAmount(0)
     }
-  }, [selectedToken, swapAmount, quantumPoolChiefs, quantumPoolEagles])
+  }, [selectedToken, swapAmount, quantumPoolChiefs, quantumPoolEagles, walletChiefs, walletEagles])
   
   const handleSwap = () => {
     const output = swapInQuantumPool(selectedToken, swapAmount)
@@ -89,6 +92,23 @@ export default function QuantumPool() {
         </div>
       </div>
       
+      {/* Wallet Balance */}
+      <div className="mb-4 p-3 bg-gray-800/30 rounded-lg">
+        <div className="flex justify-between items-center mb-2">
+          <span className="text-sm text-gray-400">Your Wallet</span>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-chiefs-red rounded-full" />
+            <span className="text-sm font-medium">CHIEFS: {walletChiefs.toLocaleString()}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-eagles-green rounded-full" />
+            <span className="text-sm font-medium">EAGLES: {walletEagles.toLocaleString()}</span>
+          </div>
+        </div>
+      </div>
+      
       {/* Pool Visualization */}
       <div className="mb-6">
         <div className="flex justify-between items-center mb-2">
@@ -121,7 +141,7 @@ export default function QuantumPool() {
           <div className="flex justify-between mb-2">
             <span className="text-sm text-gray-400">From</span>
             <span className="text-xs text-gray-500">
-              Balance: {(selectedToken === 'chiefs' ? quantumPoolChiefs : quantumPoolEagles).toLocaleString()}
+              Wallet: {(selectedToken === 'chiefs' ? walletChiefs : walletEagles).toLocaleString()}
             </span>
           </div>
           <div className="flex items-center gap-3 overflow-hidden">
@@ -162,7 +182,7 @@ export default function QuantumPool() {
           <div className="flex justify-between mb-2">
             <span className="text-sm text-gray-400">To</span>
             <span className="text-xs text-gray-500">
-              Balance: {(selectedToken === 'eagles' ? quantumPoolChiefs : quantumPoolEagles).toLocaleString()}
+              Pool: {(selectedToken === 'eagles' ? quantumPoolChiefs : quantumPoolEagles).toLocaleString()}
             </span>
           </div>
           <div className="flex items-center gap-3">
@@ -203,7 +223,7 @@ export default function QuantumPool() {
           onClick={handleSwap}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          disabled={swapAmount <= 0 || outputAmount <= 0}
+          disabled={swapAmount <= 0 || outputAmount <= 0 || swapAmount > (selectedToken === 'chiefs' ? walletChiefs : walletEagles)}
           className="w-full py-4 bg-gradient-to-r from-purple-600 to-purple-700 rounded-xl font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
         >
           QUANTUM SWAP
